@@ -5,11 +5,13 @@ import { collection, getDocs } from "firebase/firestore";
 import { db } from "../Firebase/config";
 import { Note } from "../interface/Note";
 import Spiner from "../components/spinner/Spiner";
+import Search from "../components/search/Search";
 
 const Home: FC = () => {
   const navigate = useNavigate();
   const notesRef = collection(db, "notes");
   const [notes, setNotes] = useState<Note[]>([]);
+  const [searchData, setSearchData] = useState<Note[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const fetchData = () => {
     setLoading(true);
@@ -18,6 +20,7 @@ const Home: FC = () => {
         return { title: doc.data().title, desc: doc.data().desc, id: doc.id };
       });
       setNotes(data);
+      setSearchData(data);
       setLoading(false);
     });
     setLoading(false);
@@ -25,11 +28,22 @@ const Home: FC = () => {
   useEffect(() => {
     fetchData();
   }, []);
+  const handleSearch = (str: string) => {
+    setNotes(
+      searchData.filter((note) => {
+        if (note.title.toLocaleLowerCase().includes(str)) return note;
+        else if (note.desc.toLocaleLowerCase().includes(str)) return note;
+      })
+    );
+  };
   return (
     <>
       <h1 className="text-center my-2 title position-sticky top-0">
         Retro Notes
       </h1>
+      <br />
+      <br />
+      <Search handleSearch={handleSearch} />
       <br />
       <div className="container d-flex justify-content-center  mt-5">
         {loading ? (
