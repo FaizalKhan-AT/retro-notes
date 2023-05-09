@@ -48,9 +48,12 @@ const Card: FC<Props> = ({ note, fetchData }) => {
       ) : (
         ""
       )}
-      <div className="card-note col-md-5 py-3 d-flex flex-column justify-content-between">
+      <div
+        style={{ overflowWrap: "break-word" }}
+        className="card-note col-md-5 py-3 d-flex flex-column justify-content-between"
+      >
         <span className="d-flex flex-column gap-2">
-          <h4 className="card-head py-1">{note.title}</h4>
+          <h4 className="card-head py-1 text-wrap">{note.title}</h4>
           <p className="card-body">{note.desc}</p>
         </span>
         <div className="d-flex align-items-center gap-3 my-2">
